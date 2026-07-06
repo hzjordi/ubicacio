@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Partit Judicial Lleida</title>
+
+
+<style>
+body{
+
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:26px;
+    line-height:1.6;
+    margin:18px;
+    max-width:700px;
+    color:#222;
+}
+h2{
+    font-size:38px;
+    margin-bottom:25px;
+}
+.menu{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.menu button{
+    flex:1;
+    font-size:22px;
+    font-weight:bold;
+    padding:16px;
+    border-radius:10px;
+    margin:0;
+}
+button{
+    font-size:28px;
+    padding:18px 26px;
+    width:100%;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+#resultat{
+    font-size:26px;
+}
+b{
+    font-size:28px;
+}
+hr{
+    margin:20px 0;
+}
+a{
+    font-size:26px;
+}
+</style>
+
+
+</head>
+<body>
+<div class="menu">
+    <button onclick="location.href='lleida.html'">📍 Ubicació</button>
+    <button onclick="location.href='pk_lleida.html'">🛣️ Buscar PK</button>
+</div>
+<h2>Localitzador Lleida</h2>
+
+<button onclick="buscar()">Obtenir ubicació</button>
+
+<div id="resultat"></div>
+
+<script>
+
+
+const partits = {
+
+"Àger":"Balaguer",
+"Agramunt":"Balaguer",
+"Albesa":"Balaguer",
+"Alfarràs":"Balaguer",
+"Algerri":"Balaguer",
+"Alguaire":"Balaguer",
+"Almenar":"Balaguer",
+"Alòs de Balaguer":"Balaguer",
+"Artesa de Segre":"Balaguer",
+"Les Avellanes i Santa Linya":"Balaguer",
+"Balaguer":"Balaguer",
+"Barbens":"Balaguer",
+"Bellcaire d'Urgell":"Balaguer",
+"Bellmunt d'Urgell":"Balaguer",
+"Bellvís":"Balaguer",
+"Cabanabona":"Balaguer",
+"Camarasa":"Balaguer",
+"Castelló de Farfanya":"Balaguer",
+"Castellserà":"Balaguer",
+"Cubells":"Balaguer",
+"Foradada":"Balaguer",
+"Ivars de Noguera":"Balaguer",
+"Ivars d'Urgell":"Balaguer",
+"La Fuliola":"Balaguer",
+"La Sentiu de Sió":"Balaguer",
+"Linyola":"Balaguer",
+"Menàrguens":"Balaguer",
+"Montgai":"Balaguer",
+"Oliola":"Balaguer",
+"Os de Balaguer":"Balaguer",
+"Penelles":"Balaguer",
+"El Poal":"Balaguer",
+"La Portella":"Balaguer",
+"Preixens":"Balaguer",
+"Puigverd d'Agramunt":"Balaguer",
+"Térmens":"Balaguer",
+"Tornabous":"Balaguer",
+"Torrelameu":"Balaguer",
+"Vallfogona de Balaguer":"Balaguer",
+"Vilanova de Meià":"Balaguer",
+"Vilanova de Segrià":"Balaguer",
+"Aitona":"Lleida",
+"Els Alamús":"Lleida",
+"L'Albagés":"Lleida",
+"Albatàrrec":"Lleida",
+"L'Albi":"Lleida",
+"Alcanó":"Lleida",
+"Alcarràs":"Lleida",
+"Alcoletge":"Lleida",
+"Alfés":"Lleida",
+"Almacelles":"Lleida",
+"Almatret":"Lleida",
+"Alpicat":"Lleida",
+"Arbeca":"Lleida",
+"Artesa de Lleida":"Lleida",
+"Aspa":"Lleida",
+"Bellaguarda":"Lleida",
+"Bell-lloc d'Urgell":"Lleida",
+"Benavent de Segrià":"Lleida",
+"Les Borges Blanques":"Lleida",
+"Bovera":"Lleida",
+"Castelldans":"Lleida",
+"Cervià de les Garrigues":"Lleida",
+"Corbins":"Lleida",
+"El Cogul":"Lleida",
+"L'Espluga Calba":"Lleida",
+"Fondarella":"Lleida",
+"Fulleda":"Lleida",
+"Gimenells i el Pla de la Font":"Lleida",
+"Golmés":"Lleida",
+"La Granja d'Escarp":"Lleida",
+"Granyena de les Garrigues":"Lleida",
+"Juncosa":"Lleida",
+"Juneda":"Lleida",
+"La Floresta":"Lleida",
+"La Granadella":"Lleida",
+"Llardecans":"Lleida",
+"Lleida":"Lleida",
+"Massalcoreig":"Lleida",
+"Maials":"Lleida",
+"Miralcamp":"Lleida",
+"Mollerussa":"Lleida",
+"Montoliu de Lleida":"Lleida",
+"Els Omellons":"Lleida",
+"El Palau d'Anglesola":"Lleida",
+"La Pobla de Cérvoles":"Lleida",
+"Puiggròs":"Lleida",
+"Puigverd de Lleida":"Lleida",
+"Rosselló":"Lleida",
+"Sarroca de Lleida":"Lleida",
+"Seròs":"Lleida",
+"Sidamon":"Lleida",
+"El Soleràs":"Lleida",
+"Soses":"Lleida",
+"Sudanell":"Lleida",
+"Sunyer":"Lleida",
+"Tarrés":"Lleida",
+"Els Torms":"Lleida",
+"Torrebeses":"Lleida",
+"Torrefarrera":"Lleida",
+"Torregrossa":"Lleida",
+"Torres de Segre":"Lleida",
+"Torreserona":"Lleida",
+"Vilanova de la Barca":"Lleida",
+"El Vilosell":"Lleida",
+"Vinaixa":"Lleida",
+"Anglesola":"Cervera",
+"Belianes":"Cervera",
+"Bellpuig":"Cervera",
+"Castellnou de Seana":"Cervera",
+"Cervera":"Cervera",
+"Ciutadilla":"Cervera",
+"Els Plans de Sió":"Cervera",
+"Estaràs":"Cervera",
+"Granyanella":"Cervera",
+"Granyena de Segarra":"Cervera",
+"Guimerà":"Cervera",
+"Guissona":"Cervera",
+"Ivorra":"Cervera",
+"Maldà":"Cervera",
+"Massoteres":"Cervera",
+"Montoliu de Segarra":"Cervera",
+"Montornès de Segarra":"Cervera",
+"Nalec":"Cervera",
+"Oluges":"Cervera",
+"Omells de na Gaia":"Cervera",
+"Ossó de Sió":"Cervera",
+"Preixana":"Cervera",
+"Ribera d'Ondara":"Cervera",
+"Sant Guim de Freixenet":"Cervera",
+"Sant Guim de la Plana":"Cervera",
+"Sant Martí de Riucorb":"Cervera",
+"Sant Ramon":"Cervera",
+"Talavera":"Cervera",
+"Tàrrega":"Cervera",
+"Tarroja de Segarra":"Cervera",
+"Torrefeta i Florejacs":"Cervera",
+"Vallbona de les Monges":"Cervera",
+"Verdú":"Cervera",
+"Vilagrassa":"Cervera",
+"Vilanova de Bellpuig":"Cervera",
+"Vila-sana":"Cervera",
+"Bassella":"Solsona",
+"Biosca":"Solsona",
+"Castellar de la Ribera":"Solsona",
+"Clariana de Cardener":"Solsona",
+"Gósol":"Solsona",
+"Guixers":"Solsona",
+"La Baronia de Rialb":"Solsona",
+"La Molsosa":"Solsona",
+"Lladurs":"Solsona",
+"Llobera":"Solsona",
+"Navès":"Solsona",
+"Odèn":"Solsona",
+"Oliana":"Solsona",
+"Olius":"Solsona",
+"La Coma i la Pedra":"Solsona",
+"Peramola":"Solsona",
+"Pinell de Solsonès":"Solsona",
+"Pinós":"Solsona",
+"Ponts":"Solsona",
+"Riner":"Solsona",
+"Sanaüja":"Solsona",
+"Sant Llorenç de Morunys":"Solsona",
+"Solsona":"Solsona",
+"Tiurana":"Solsona",
+"Torà":"Solsona",
+"Vilanova de l'Aguda":"Solsona",
+};
+
+
+const jutjats={
+"Lleida":{nom:"Tribunal d'Instància de Lleida",adreca:"Carrer del Canyeret, 3-5, 25007 Lleida",telefon:"973700100"},
+"Balaguer":{nom:"Tribunal d'Instància de Balaguer",adreca:"Plaça dels Comtes d'Urgell, 5, 25600 Balaguer",telefon:"973448400"},
+"Cervera":{nom:"Tribunal d'Instància de Cervera",adreca:"Avinguda Duran i Sanpere, 5, 25200 Cervera",telefon:"973533350"},
+"Solsona":{nom:"Tribunal d'Instància de Solsona",adreca:"Carrer de Llobera, 1, 25280 Solsona",telefon:"973482005"},
+"La Seu d'Urgell":{nom:"Tribunal d'Instància de la Seu d'Urgell",adreca:"Avinguda del Camí Ral de Cerdanya, 77, 25700 La Seu d'Urgell",telefon:"973350170"},
+"Tremp":{nom:"Tribunal d'Instància de Tremp",adreca:"Plaça de la Creu, 1, 25620 Tremp",telefon:"973650605"},
+"Vielha e Mijaran":{nom:"Tribunal d'Instància de Vielha",adreca:"Carrer Sarriulera, 10, 25530 Vielha",telefon:"973640123"}
+};
+
+
+const exclosos=[
+    "La Seu d'Urgell",
+    "Tremp",
+    "Vielha e Mijaran"
+];
+
+
+let pkData=[];
+
+fetch('pk_lleida.json')
+.then(r=>r.json())
+.then(d=>pkData=d)
+.catch(()=>console.log('No s\'ha pogut carregar pk_lleida.json'));
+
+function distancia(lat1,lon1,lat2,lon2){
+ const R=6371000;
+ const toRad=x=>x*Math.PI/180;
+ const dLat=toRad(lat2-lat1);
+ const dLon=toRad(lon2-lon1);
+ const a=Math.sin(dLat/2)**2+
+ Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+ return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function pkMesProper(lat,lon){
+ if(!pkData.length) return null;
+ let millor=null,dist=1e20;
+ for(const p of pkData){
+   const d=distancia(lat,lon,p[3],p[4]);
+   if(d<dist){dist=d;millor=p;}
+ }
+ return {carretera:millor[0],pk:millor[1],sentit:millor[2],dist:Math.round(dist)};
+}
+
+
+async function buscar(){
+
+    resultat.innerHTML="Obtenint GPS...";
+
+    navigator.geolocation.getCurrentPosition(async(pos)=>{
+
+        const lat=pos.coords.latitude;
+        const lon=pos.coords.longitude;
+        const precisio=pos.coords.accuracy;
+        const pk=pkMesProper(lat,lon);
+
+        const ara=new Date();
+        const data=ara.toLocaleDateString('ca-ES');
+        const hora=ara.toLocaleTimeString('ca-ES');
+
+        try{
+
+            const resposta=await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ca`
+            );
+
+            const json=await resposta.json();
+
+            const municipi=
+                json.address.municipality ||
+                json.address.city ||
+                json.address.town ||
+                json.address.village;
+
+            if(!municipi){
+                resultat.innerHTML="No s'ha pogut determinar el municipi.";
+                return;
+            }
+
+            const partit=partits[municipi];
+            const jutjat=jutjats[partit];
+
+            if(!partit){
+                resultat.innerHTML=`
+                <b>Municipi:</b> ${municipi}<br><br>
+                <span style="color:red;font-weight:bold">
+                Fora de la província de Lleida o municipi no inclòs a la base de dades.
+                </span>`;
+                return;
+            }
+
+            resultat.innerHTML=`
+                <b>Municipi:</b> ${municipi}<br>
+                <b>Partit judicial:</b> ${partit}<hr><b>${jutjat.nom}</b><br>
+                📍 ${jutjat.adreca}<br>
+                ☎️ ${jutjat.telefon}<hr><b>🛰️ Coordenades GPS</b><br>
+                Latitud: ${lat.toFixed(6)}<br>
+                Longitud: ${lon.toFixed(6)}<br>
+                Precisió: ±${Math.round(precisio)} m<hr><b>🛣️ Carretera:</b> ${pk?pk.carretera:'-'}<br>
+                <b>PK:</b> ${pk?pk.pk:'-'}<br>
+                <b>Sentit:</b> ${pk?pk.sentit:'-'}<br>
+                <b>Distància al PK:</b> ${pk?pk.dist+' m':'-'}<hr><b>🕒 Data:</b> ${data}<br>
+                <b>Hora:</b> ${hora}`;
+
+        }catch(e){
+
+            resultat.innerHTML="Error consultant OpenStreetMap.";
+
+        }
+
+    },()=>{
+
+        resultat.innerHTML="No s'ha pogut obtenir el GPS.";
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

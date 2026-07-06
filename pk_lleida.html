@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PK Lleida</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;font-size:26px;line-height:1.6;margin:18px;max-width:700px}
+h2{font-size:38px}
+label{font-weight:bold;font-size:28px;display:block;margin-top:16px}
+input,select,button{width:100%;font-size:26px;padding:14px;border-radius:10px;box-sizing:border-box}
+.menu{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.menu button{
+    flex:1;
+    font-size:22px;
+    font-weight:bold;
+    padding:16px;
+    border-radius:10px;
+    margin:0;
+}
+button{margin-top:22px}
+#info{margin-top:20px}
+</style>
+</head>
+<body>
+<body>
+
+<div class="menu">
+
+    <button onclick="location.href='lleida.html'">
+        📍 Ubicació
+    </button>
+
+    <button onclick="location.href='pk_lleida.html'">
+        🛣️ Buscar PK
+    </button>
+
+</div>
+
+<h2>Localitzador Lleida</h2>
+<h2>📍 PK Lleida</h2>
+
+<label>🔍 Buscar carretera</label>
+<input id="buscarCarretera" placeholder="Ex.: C13, N230, LL11">
+
+<label>Carretera</label>
+<select id="carretera"></select>
+
+<label>🔍 Buscar PK</label>
+<input id="buscarPk" placeholder="Ex.: 184">
+
+<label>Punt quilomètric</label>
+<select id="pk"></select>
+
+<div id="info"></div>
+
+<button onclick="obrirMaps()">📍 Obrir a Google Maps</button>
+
+<script>
+let dades=[],actual=null;
+
+const norm=t=>t.toUpperCase().replace(/[^A-Z0-9]/g,'');
+
+fetch("pk_lleida.json").then(r=>r.json()).then(j=>{
+ dades=j;
+ omplirCarreteres("");
+
+ document.getElementById("buscarCarretera").addEventListener("input",e=>omplirCarreteres(e.target.value));
+ document.getElementById("buscarPk").addEventListener("input",filtrarPK);
+
+ document.getElementById("carretera").onchange=()=>{carregarPK();document.getElementById("buscarPk").value="";};
+ document.getElementById("pk").onchange=mostrar;
+});
+
+function omplirCarreteres(f){
+ const s=document.getElementById("carretera");
+ s.innerHTML="";
+ [...new Set(dades.map(x=>x[0]))].sort()
+ .filter(c=>norm(c).includes(norm(f)))
+ .forEach(c=>{
+   let o=document.createElement("option");
+   o.value=c;o.textContent=c;s.appendChild(o);
+ });
+ if(s.options.length) carregarPK();
+}
+
+function carregarPK(){
+ const c=document.getElementById("carretera").value;
+ const s=document.getElementById("pk");
+ s.innerHTML="";
+ dades.filter(x=>x[0]===c).forEach(r=>{
+   let o=document.createElement("option");
+   o.value=r[1];
+   o.textContent="PK "+r[1];
+   s.appendChild(o);
+ });
+ mostrar();
+}
+
+function filtrarPK(){
+ const txt=document.getElementById("buscarPk").value.trim();
+ const c=document.getElementById("carretera").value;
+ const s=document.getElementById("pk");
+ s.innerHTML="";
+ dades.filter(x=>x[0]===c && String(x[1]).startsWith(txt)).forEach(r=>{
+   let o=document.createElement("option");
+   o.value=r[1];
+   o.textContent="PK "+r[1];
+   s.appendChild(o);
+ });
+ if(s.options.length){s.selectedIndex=0;mostrar();}
+}
+
+function mostrar(){
+ const c=document.getElementById("carretera").value;
+ const p=document.getElementById("pk").value;
+ actual=dades.find(x=>x[0]===c && String(x[1])===String(p));
+ if(!actual)return;
+ document.getElementById("info").innerHTML=
+ `<hr><b>Carretera:</b> ${actual[0]}<br>
+ <b>PK:</b> ${actual[1]}<br>
+ <b>Sentit:</b> ${actual[2]}<br>
+ <b>Latitud:</b> ${actual[3]}<br>
+ <b>Longitud:</b> ${actual[4]}`;
+}
+
+function obrirMaps(){
+ if(actual) window.open(`https://www.google.com/maps?q=${actual[3]},${actual[4]}`,"_blank");
+}
+</script>
+</body>
+</html>
