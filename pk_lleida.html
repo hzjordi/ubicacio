@@ -57,6 +57,9 @@ button{margin-top:22px}
 <label>Punt quilomètric</label>
 <select id="pk"></select>
 
+<label>Sentit</label>
+<select id="sentit"></select>
+
 <div id="info"></div>
 
 <button onclick="obrirMaps()">📍 Obrir a Google Maps</button>
@@ -74,7 +77,8 @@ fetch("pk_lleida.json").then(r=>r.json()).then(j=>{
  document.getElementById("buscarPk").addEventListener("input",filtrarPK);
 
  document.getElementById("carretera").onchange=()=>{carregarPK();document.getElementById("buscarPk").value="";};
- document.getElementById("pk").onchange=mostrar;
+ document.getElementById("pk").onchange=carregarSentits;
+ document.getElementById("sentit").onchange=mostrar;
 });
 
 function omplirCarreteres(f){
@@ -90,18 +94,57 @@ function omplirCarreteres(f){
 }
 
 function carregarPK(){
- const c=document.getElementById("carretera").value;
- const s=document.getElementById("pk");
- s.innerHTML="";
- dades.filter(x=>x[0]===c).forEach(r=>{
-   let o=document.createElement("option");
-   o.value=r[1];
-   o.textContent="PK "+r[1];
-   s.appendChild(o);
- });
- mostrar();
-}
 
+    const c=document.getElementById("carretera").value;
+
+    const pks=[...new Set(
+        dades.filter(x=>x[0]===c).map(x=>x[1])
+    )];
+
+    const s=document.getElementById("pk");
+    s.innerHTML="";
+
+    pks.forEach(pk=>{
+
+        let o=document.createElement("option");
+
+        o.value=pk;
+        o.textContent="PK "+pk;
+
+        s.appendChild(o);
+
+    });
+
+    carregarSentits();
+}
+function carregarSentits(){
+
+    const c=document.getElementById("carretera").value;
+    const pk=document.getElementById("pk").value;
+
+    const sentits=dades.filter(x=>
+        x[0]===c &&
+        String(x[1])===String(pk)
+    );
+
+    const s=document.getElementById("sentit");
+
+    s.innerHTML="";
+
+    sentits.forEach(r=>{
+
+        let o=document.createElement("option");
+
+        o.value=r[2];
+        o.textContent=r[2];
+
+        s.appendChild(o);
+
+    });
+
+    mostrar();
+
+}
 function filtrarPK(){
  const txt=document.getElementById("buscarPk").value.trim();
  const c=document.getElementById("carretera").value;
@@ -119,7 +162,15 @@ function filtrarPK(){
 function mostrar(){
  const c=document.getElementById("carretera").value;
  const p=document.getElementById("pk").value;
- actual=dades.find(x=>x[0]===c && String(x[1])===String(p));
+const sentit=document.getElementById("sentit").value;
+
+actual=dades.find(x=>
+
+    x[0]===c &&
+    String(x[1])===String(p) &&
+    x[2]===sentit
+
+);
  if(!actual)return;
  document.getElementById("info").innerHTML=
  `<hr><b>Carretera:</b> ${actual[0]}<br>
