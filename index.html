@@ -416,10 +416,14 @@ async function buscar(){
                 ☎️ ${jutjat.telefon}<hr><b>🛰️ Coordenades GPS</b><br>
                 Latitud: ${lat.toFixed(6)}<br>
                 Longitud: ${lon.toFixed(6)}<br>
-                Precisió: ±${Math.round(precisio)} m<hr><b>🛣️ Carretera:</b> ${pk?pk.carretera:'-'}<br>
-                <b>PK:</b> ${pk?pk.pk:'-'}<br>
-                <b>Sentit:</b> ${pk?pk.sentit:'-'}<br>
-                <b>Distància al PK:</b> ${pk?pk.dist+' m':'-'}<hr><b>🕒 Data:</b> ${data}<br>
+                Precisió: ±${Math.round(precisio)} m<hr><b>🛣️ PK més propers</b><br><br>
+
+${pks.map((p,i)=>
+`${i+1}️⃣ <b>${p.carretera}</b>
+PK ${p.pk}
+(${p.sentit})
+- ${p.dist} m`
+).join("<br><br>")}
                 <b>Hora:</b> ${hora}`;
 
         }catch(e){
