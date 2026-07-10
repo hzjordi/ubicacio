@@ -338,19 +338,19 @@ function distancia(lat1,lon1,lat2,lon2){
 
 function pkMesPropers(lat,lon){
 
+    if(!pkData.length) return [];
+
     let llista=[];
 
     for(const p of pkData){
 
         llista.push({
-
             carretera:p[0],
             pk:p[1],
             sentit:p[2],
             dist:Math.round(
                 distancia(lat,lon,p[3],p[4])
             )
-
         });
 
     }
@@ -360,8 +360,6 @@ function pkMesPropers(lat,lon){
     return llista.slice(0,3);
 
 }
-# return {carretera:millor[0],pk:millor[1],sentit:millor[2],dist:Math.round(dist)};
-#}
 
 
 async function buscar(){
@@ -416,17 +414,18 @@ async function buscar(){
                 ☎️ ${jutjat.telefon}<hr><b>🛰️ Coordenades GPS</b><br>
                 Latitud: ${lat.toFixed(6)}<br>
                 Longitud: ${lon.toFixed(6)}<br>
-                Precisió: ±${Math.round(precisio)} m<hr><b>🛣️ PK més propers</b><br><br>
+                Precisió: ±${Math.round(precisio)} m<hr>
+                <hr>
+                    <b>🛣️ 3 PK més propers</b><br><br>
 
-${pks.map((p,i)=>
-`${i+1}️⃣ <b>${p.carretera}</b>
-PK ${p.pk}
-(${p.sentit})
-- ${p.dist} m`
-).join("<br><br>")}
-                <b>Hora:</b> ${hora}`;
+            ${pks.map((p,i)=>`
+            <b>${i+1}️⃣ ${p.carretera}</b><br>
+            PK ${p.pk}<br>
+            ${p.sentit}<br>
+            ${p.dist} m
+            `).join("<br><br>")}
 
-        }catch(e){
+                    }catch(e){
 
             resultat.innerHTML="Error consultant OpenStreetMap.";
 
