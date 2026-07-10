@@ -416,20 +416,17 @@ async function buscar(){
                 <td>Sentit</td>
                 <td>Dist.</td>
                 </tr>
-
-${pks.map((p,i)=>`
-<tr>
-    <td>${i+1}</td>
-    <td>${p.carretera}</td>
-    <td>${p.pk}</td>
-    <td>${p.sentit}</td>
-    <td>${p.dist} m</td>
-</tr>
-`).join("")}
-
-</table>
-
-<hr>
+                ${pks.map((p,i)=>`
+                <tr>
+                    <td>${i+1}</td>
+                    <td>${p.carretera}</td>
+                    <td>${p.pk}</td>
+                    <td>${p.sentit}</td>
+                    <td>${p.dist} m</td>
+                </tr>
+                `).join("")}
+                </table>
+                <hr>
 
 <b>🕒 Data:</b> ${data}<br>
 <b>Hora:</b> ${hora}
