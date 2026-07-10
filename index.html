@@ -336,14 +336,20 @@ function distancia(lat1,lon1,lat2,lon2){
  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-function pkMesProper(lat,lon){
- if(!pkData.length) return null;
- let millor=null,dist=1e20;
- for(const p of pkData){
-   const d=distancia(lat,lon,p[3],p[4]);
-   if(d<dist){dist=d;millor=p;}
- }
- return {carretera:millor[0],pk:millor[1],sentit:millor[2],dist:Math.round(dist)};
+function pkMesPropers(lat,lon){
+    if(!pkData.length) return [];
+    let llista=[];
+    for(const p of pkData){
+        const d=distancia(lat,lon,p[3],p[4]);
+        llista.push({
+            carretera:p[0],
+            pk:p[1],
+            sentit:p[2],
+            dist:Math.round(d)
+        });
+    }
+    llista.sort((a,b)=>a.dist-b.dist);
+    return llista.slice(0,3);
 }
 
 
@@ -356,7 +362,7 @@ async function buscar(){
         const lat=pos.coords.latitude;
         const lon=pos.coords.longitude;
         const precisio=pos.coords.accuracy;
-        const pk=pkMesProper(lat,lon);
+        const pks=pkMesPropers(lat,lon);
 
         const ara=new Date();
         const data=ara.toLocaleDateString('ca-ES');
