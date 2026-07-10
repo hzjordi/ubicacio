@@ -407,19 +407,15 @@ async function buscar(){
                 Latitud: ${lat.toFixed(6)}<br>
                 Longitud: ${lon.toFixed(6)}<br>
                 Precisió: ±${Math.round(precisio)} m 
-               <hr>
-
-<b>🛣️ 3 PK més propers</b><br><br>
-
-<table style="width:100%;border-collapse:collapse;text-align:center">
-
-<tr style="font-weight:bold;border-bottom:2px solid #000;">
-    <td>Nº</td>
-    <td>Carretera</td>
-    <td>PK</td>
-    <td>Sentit</td>
-    <td>Dist.</td>
-</tr>
+               <hr><b>🛣️ 3 PK més propers</b><br><br>
+                <table style="width:100%;border-collapse:collapse;text-align:center">
+                <tr style="font-weight:bold;border-bottom:2px solid #000;">
+                <td>Nº</td>    
+                <td>Carretera</td>
+                <td>PK</td>
+                <td>Sentit</td>
+                <td>Dist.</td>
+                </tr>
 
 ${pks.map((p,i)=>`
 <tr>
